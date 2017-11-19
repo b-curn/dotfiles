@@ -27,7 +27,7 @@ font pango:DejaVu Sans Mono 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec urxvt
 
 # kill focused window
 bindsym $mod+x kill
@@ -73,7 +73,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+o layout stacking
+bindsym $mod+p layout stacking
 bindsym $mod+comma layout tabbed
 bindsym $mod+period layout toggle split
 
@@ -100,16 +100,6 @@ bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 bindsym $mod+0 workspace 10
-bindsym $mod+KP_0 workspace 10
-bindsym $mod+KP_1 workspace 1
-bindsym $mod+KP_2 workspace 2
-bindsym $mod+KP_3 workspace 3
-bindsym $mod+KP_4 workspace 4
-bindsym $mod+KP_5 workspace 5
-bindsym $mod+KP_6 workspace 6
-bindsym $mod+KP_7 workspace 7
-bindsym $mod+KP_8 workspace 8
-bindsym $mod+KP_9 workspace 9
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -122,22 +112,12 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
-bindsym $mod+Shift+KP_1 move container to workspace 1
-bindsym $mod+Shift+KP_2 move container to workspace 2
-bindsym $mod+Shift+KP_3 move container to workspace 3
-bindsym $mod+Shift+KP_4 move container to workspace 4
-bindsym $mod+Shift+KP_5 move container to workspace 5
-bindsym $mod+Shift+KP_6 move container to workspace 6
-bindsym $mod+Shift+KP_7 move container to workspace 7
-bindsym $mod+Shift+KP_8 move container to workspace 8
-bindsym $mod+Shift+KP_9 move container to workspace 9
-bindsym $mod+Shift+KP_0 move container to workspace 10
 
 # reload the configuration file
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+R restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exit
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -170,9 +150,9 @@ bindsym XF86MonBrightnessUp exec python ~/scripts/bright_up.py
 bindsym XF86MonBrightnessDown exec python ~/scripts/bright_down.py 
 
 # Touchpad controls
-bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
-
-# Media player controls
+#bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
+bindsym $mod+c exec --no-startup-id "/home/brendan/scripts/blurlock.sh"
+# Media player control
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
@@ -180,9 +160,13 @@ bindsym XF86AudioPrev exec playerctl previous
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
-	position top
+    colors {
+        background   #1d1f21
+        statusline   #c5c8c6
     }
+    status_command i3status
+	position top
+}
 
 
 
@@ -190,12 +174,11 @@ bar {
 exec --no-startup-id nm-applet
 exec --no-startup-id nitrogen --restore
 exec --no-startup-id volumeicon
-exec --no-startup-id xautolock -time 10 -locker 'i3lock -d -c 000000'
-exec ~/Desktop/xrandr_init.sh
+exec --no-startup-id syndaemon -i 0.1 
+exec --no-startup-id compton --backend glx --vsync opengl-swc
 
-workspace 1 output DVI-0
-workspace 2 output DVI-1
-workspace 3 output DisplayPort-0
+gaps inner 10
+for_window [class="^.*"] border pixel 3
 
-
-bindsym $mod+c exec --no-startup-id i3lock -d -c 000000
+smart_gaps on
+smart_borders on
